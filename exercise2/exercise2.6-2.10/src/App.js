@@ -7,11 +7,14 @@ class App extends React.Component {
     super(props)
     this.state = {
       persons: [
-        { name: 'Arto Hellas',
-          number: '044-1234567'}
+        { name: 'Arto Hellas', number: '044-1234567'},
+        { name: 'Martti Tienari', number: '040-123456' },
+        { name: 'Arto Järvinen', number: '040-123456' },
+        { name: 'Lea Kutvonen', number: '040-123456' }
       ],
       newName: '',
       newNumber: '',
+      searched: '',
     }
   }
 
@@ -27,6 +30,8 @@ class App extends React.Component {
     })
   }
 
+
+
   Exists = () => {
 
     const result = this.state.persons.reduce((tulos, person) =>{
@@ -38,6 +43,12 @@ class App extends React.Component {
     }, false)
     return !result
 
+  }
+
+  updateSearched = (event) => {
+    this.setState({
+      searched: event.target.value
+    })
   }
 
   addPerson = (event) => {
@@ -65,9 +76,14 @@ class App extends React.Component {
   }
 
   render() {
+
     return (
       <div>
         <h2>Puhelinluettelo</h2>
+        <div>
+          rajaa näytettäviä <input value={this.state.searched} onChange={this.updateSearched}/>
+        </div>
+        <h2>Lisää uusi</h2>
         <form onSubmit={this.addPerson}>
           <div>
             nimi: <input value={this.state.newName} onChange={this.updateName}/>
@@ -80,7 +96,9 @@ class App extends React.Component {
         </form>
         <h2>Numerot</h2>
         <table>
-            {this.state.persons.map(person=><Person key={person.name} henkilo={person}/>)}
+          <tbody>
+            {this.state.persons.map(person=><Person filter={this.state.searched} key={person.name} henkilo={person}/>)}
+          </tbody>
         </table>
       </div>
     )
