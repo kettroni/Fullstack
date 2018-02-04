@@ -7,15 +7,23 @@ class App extends React.Component {
     super(props)
     this.state = {
       persons: [
-        { name: 'Arto Hellas' }
+        { name: 'Arto Hellas',
+          number: '044-1234567'}
       ],
-      newName: ''
+      newName: '',
+      newNumber: '',
     }
   }
 
   updateName = (event) => {
     this.setState({
       newName: event.target.value
+    })
+  }
+
+  updateNumber = (event) => {
+    this.setState({
+      newNumber: event.target.value
     })
   }
 
@@ -37,7 +45,8 @@ class App extends React.Component {
     if (this.Exists()) {
 
       const person = {
-        name: this.state.newName
+        name: this.state.newName,
+        number: this.state.newNumber
       }
 
       const persons = this.state.persons.concat(person)
@@ -48,7 +57,8 @@ class App extends React.Component {
       })
     } else {
       this.setState({
-        newName: ''
+        newName: '',
+        newNumber: ''
       })
     }
 
@@ -61,15 +71,17 @@ class App extends React.Component {
         <form onSubmit={this.addPerson}>
           <div>
             nimi: <input value={this.state.newName} onChange={this.updateName}/>
+            <p></p>
+            numero: <input value={this.state.newNumber} onChange={this.updateNumber}/>
           </div>
           <div>
             <button type="submit">lisää</button>
           </div>
         </form>
         <h2>Numerot</h2>
-        <ul>
-          {this.state.persons.map(person=><Person key={person.name} henkilo={person}/>)}
-        </ul>
+        <table>
+            {this.state.persons.map(person=><Person key={person.name} henkilo={person}/>)}
+        </table>
       </div>
     )
   }

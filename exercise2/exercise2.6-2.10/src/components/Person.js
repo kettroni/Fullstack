@@ -1,5 +1,12 @@
 import React from 'react'
 
-const Person = (props) => <li>{props.henkilo.name}</li>
+const Person = (props) => {
+  return (
+    <tr>
+      <td>{props.henkilo.name}</td>
+      <td>{props.henkilo.number}</td>
+    </tr>
+  )
+}
 
 export default Person
