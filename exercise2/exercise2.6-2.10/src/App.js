@@ -1,5 +1,7 @@
 import React from 'react';
-import Person from './components/Person'
+import addPerson from './components/addPerson'
+import NameFilter from './components/NameFilter'
+import PrintPersons from './components/PrintPersons'
 
 
 class App extends React.Component {
@@ -18,6 +20,7 @@ class App extends React.Component {
     }
   }
 
+
   updateName = (event) => {
     this.setState({
       newName: event.target.value
@@ -31,48 +34,15 @@ class App extends React.Component {
   }
 
 
-
-  Exists = () => {
-
-    const result = this.state.persons.reduce((tulos, person) =>{
-      if (tulos) {
-        return tulos = true
-      } else {
-        return tulos = (person.name === this.state.newName)
-      }
-    }, false)
-    return !result
-
-  }
-
   updateSearched = (event) => {
     this.setState({
       searched: event.target.value
     })
   }
 
-  addPerson = (event) => {
+  add = (event) => {
     event.preventDefault()
-    if (this.Exists()) {
-
-      const person = {
-        name: this.state.newName,
-        number: this.state.newNumber
-      }
-
-      const persons = this.state.persons.concat(person)
-
-      this.setState({
-        persons,
-        newName: ''
-      })
-    } else {
-      this.setState({
-        newName: '',
-        newNumber: ''
-      })
-    }
-
+    addPerson(this)
   }
 
   render() {
@@ -81,10 +51,10 @@ class App extends React.Component {
       <div>
         <h2>Puhelinluettelo</h2>
         <div>
-          rajaa näytettäviä <input value={this.state.searched} onChange={this.updateSearched}/>
+          <NameFilter state={this.state} updateSearched={this.updateSearched}/>
         </div>
         <h2>Lisää uusi</h2>
-        <form onSubmit={this.addPerson}>
+        <form onSubmit={this.add}>
           <div>
             nimi: <input value={this.state.newName} onChange={this.updateName}/>
             <p></p>
@@ -95,11 +65,7 @@ class App extends React.Component {
           </div>
         </form>
         <h2>Numerot</h2>
-        <table>
-          <tbody>
-            {this.state.persons.map(person=><Person filter={this.state.searched} key={person.name} henkilo={person}/>)}
-          </tbody>
-        </table>
+        <PrintPersons state={this.state}/>
       </div>
     )
   }
