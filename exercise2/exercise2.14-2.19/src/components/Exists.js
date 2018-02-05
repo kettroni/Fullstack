@@ -1,5 +1,3 @@
-
-
 const Exists = (props) => {
 
   const result = props.persons.reduce((tulos, person) =>{

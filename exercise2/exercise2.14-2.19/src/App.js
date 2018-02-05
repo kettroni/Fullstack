@@ -76,7 +76,7 @@ class App extends React.Component {
           </div>
         </form>
         <h2>Numerot</h2>
-        <PrintPersons state={this.state}/>
+          <PrintPersons tama={this}/>
       </div>
     )
   }
