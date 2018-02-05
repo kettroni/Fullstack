@@ -51,8 +51,7 @@ class App extends React.Component {
 
   add = (event) => {
     event.preventDefault()
-    if(this.isValid()) {
-    } else {
+    if(!this.isValid()) {
       addPerson(this)
     }
   }

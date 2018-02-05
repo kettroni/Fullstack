@@ -2,6 +2,7 @@ import React from 'react'
 import Person from './Person'
 
 const PrintPersons = (props) => {
+
   if (props.state.persons.length !== 0) {
     return(
       <table>
