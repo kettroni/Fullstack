@@ -16,7 +16,7 @@ class App extends React.Component {
     }
   }
 
-  promise = axios.get('http://localhost:3001/persons')
+  promise = axios.get('http://localhost:3001/api/persons')
 
   eventHandler = (response) => {
     this.setState({persons: response.data})
@@ -38,11 +38,6 @@ class App extends React.Component {
     })
   }
 
-  isValid = () => {
-    return (this.state.newName === '' || this.state.newNumber === '' || this.state.newName === undefined)
-  }
-
-
   updateSearched = (event) => {
     this.setState({
       searched: event.target.value
@@ -51,9 +46,7 @@ class App extends React.Component {
 
   add = (event) => {
     event.preventDefault()
-    if(!this.isValid()) {
-      addPerson(this)
-    }
+    addPerson(this)
   }
 
   render() {
