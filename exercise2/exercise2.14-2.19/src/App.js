@@ -16,7 +16,7 @@ class App extends React.Component {
     }
   }
 
-  promise = axios.get('http://localhost:3001/api/persons')
+  promise = axios.get('https://blooming-basin-64505.herokuapp.com//api/persons')
 
   eventHandler = (response) => {
     this.setState({persons: response.data})
