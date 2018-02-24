@@ -28,8 +28,6 @@ const mostBlogs = (blogs) => {
     names: [],
     numbers: []
   }
-  let amount = 0
-  let most
   for (let index in blogs) {
     let contain = false
     let place
@@ -63,9 +61,50 @@ const mostBlogs = (blogs) => {
   }
 }
 
+const mostLikes = (blogs) => {
+  const collection = {
+    names: [],
+    likes: []
+  }
+  for (let index in blogs) {
+    let amount = 0
+    let contain = false
+    let place
+    const temp = blogs[index]
+    for (let i = 0; i < collection.names.length; i++) {
+      if (!contain) {
+        if (collection.names[i] === temp.author) {
+          contain = true
+          amount = temp.likes
+          place = i
+        }
+      }
+    }
+    if (contain) {
+      collection.likes[place] += amount
+    } else {
+      collection.names.push(temp.author)
+      collection.likes.push(temp.likes)
+    }
+  }
+
+  const highestnumberindex = collection.likes.indexOf(Math.max(...collection.likes))
+  if (highestnumberindex !== -1) {
+    return (
+      {
+        author: collection.names[highestnumberindex],
+        likes: collection.likes[highestnumberindex]
+      }
+    )
+  } else {
+    return 'no blogs'
+  }
+}
+
 module.exports = {
   dummy,
   totalLikes,
   favoriteBlog,
-  mostBlogs
+  mostBlogs,
+  mostLikes
 }
