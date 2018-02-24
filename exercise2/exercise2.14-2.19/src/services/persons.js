@@ -1,17 +1,21 @@
 import axios from 'axios'
-const baseUrl = 'https://blooming-basin-64505.herokuapp.com/api/persons'
+const baseUrl = '/api/persons'
 
 const getAll = () => {
   const request = axios.get(baseUrl)
-  return request.then(response => { return response.data })
+  return request
 }
 
 const create = (newObject, props) => {
   const request = axios.post(baseUrl, newObject)
   return request.then(response => {
-
+    const person = {
+      name: response.data.name,
+      number: response.data.number,
+      id: response.data._id
+    }
     props.setState({
-      persons: props.state.persons.concat(response.data),
+      persons: props.state.persons.concat(person),
       newName: '',
       newNumber: '',
       searched: ''

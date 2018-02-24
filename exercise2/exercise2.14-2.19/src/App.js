@@ -2,8 +2,7 @@ import React from 'react'
 import addPerson from './components/addPerson'
 import NameFilter from './components/NameFilter'
 import PrintPersons from './components/PrintPersons'
-import axios from 'axios'
-
+import personService from './services/persons'
 
 class App extends React.Component {
   constructor(props) {
@@ -16,14 +15,12 @@ class App extends React.Component {
     }
   }
 
-  promise = axios.get('https://blooming-basin-64505.herokuapp.com/api/persons')
-
   eventHandler = (response) => {
     this.setState({persons: response.data})
   }
 
   componentWillMount() {
-    this.promise.then(this.eventHandler)
+    personService.getAll().then(this.eventHandler)
   }
 
   updateName = (event) => {
