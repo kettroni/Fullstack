@@ -2,21 +2,7 @@ const supertest = require('supertest')
 const { app, server } = require('../index')
 const api = supertest(app)
 const Blog = require('../models/blog')
-
-const initialBlogs = [
-  {
-    title: "React patterns",
-    author: "Michael Chan",
-    url: "https://reactpatterns.com/",
-    likes: 7
-  },
-  {
-    title: "Go To Statement Considered Harmful",
-    author: "Edsger W. Dijkstra",
-    url: "http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html",
-    likes: 5
-  }
-]
+const {initialBlogs, testForPost, testPostNoLikes, testPostNoTitle, blogsInDb} = require('./test_helper')
 
 beforeAll(async () => {
   await Blog.remove({})
@@ -37,7 +23,8 @@ test('all blogs are returned', async () => {
   const response = await api
     .get('/api/blogs')
 
-  expect(response.body.length).toEqual(initialBlogs.length)
+  const blogs = await blogsInDb()
+  expect(response.body.length).toEqual(blogs.length)
 })
 
 test('a specific blog is within the returned blogs', async () => {
@@ -51,36 +38,27 @@ test('a specific blog is within the returned blogs', async () => {
 
 test('POST request saves and get returns updated list after', async () => {
 
-  const beginning = await api.get('/api/blogs')
+  const beginning = await blogsInDb()
 
   const response = await api
     .post('/api/blogs')
-    .send({
-      title: "I AM A TEST",
-      author: "Michael Chan",
-      url: "https://reactpatterns.com/",
-      likes: 7
-    })
+    .send(testForPost)
 
-  const after = await api.get('/api/blogs')
-  const titles = after.body.map(a => a.title)
+  const after = await blogsInDb()
+  const titles = after.map(a => a.title)
 
   expect(titles).toContainEqual('I AM A TEST')
-  expect(after.body.length).toBe(beginning.body.length + 1)
+  expect(after.length).toBe(beginning.length + 1)
 })
 
 test('adding a blog with no value in likes assigns it to 0', async () => {
 
   const response = await api
     .post('/api/blogs')
-    .send({
-      title: "I AM A TEST",
-      author: "Michael Chan",
-      url: "https://reactpatterns.com/"
-    })
+    .send(testPostNoLikes)
 
-  const after = await api.get('/api/blogs')
-  const likes = after.body.map(a => a.likes)
+  const after = await blogsInDb()
+  const likes = after.map(a => a.likes)
   expect(likes).toContain(0)
 })
 
@@ -88,10 +66,7 @@ test('adding a blog without title or url responses with status code 400 Bad requ
 
   const response = await api
     .post('/api/blogs')
-    .send({
-      author: "Some random dude",
-      likes: "0"
-    })
+    .send(testPostNoTitle)
 
   expect(response.status).toBe(400)
 
