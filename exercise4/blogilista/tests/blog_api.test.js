@@ -49,18 +49,25 @@ test('a specific blog is within the returned blogs', async () => {
   expect(titles).toContainEqual('React patterns')
 })
 
-/*test('POST request saves ', async () => {
-  const response = await application
+test('POST request saves and get returns updated list after', async () => {
+
+  const beginning = await api.get('/api/blogs')
+
+  const response = await api
     .post('/api/blogs')
     .send({
-      title: "React patterns",
+      title: "I AM A TEST",
       author: "Michael Chan",
       url: "https://reactpatterns.com/",
       likes: 7
     })
 
+  const after = await api.get('/api/blogs')
+  const titles = after.body.map(a => a.title)
 
-})*/
+  expect(titles).toContainEqual('I AM A TEST')
+  expect(after.body.length).toBe(beginning.body.length + 1)
+})
 
 afterAll(() => {
   server.close()
