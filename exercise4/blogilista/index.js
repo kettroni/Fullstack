@@ -8,6 +8,7 @@ const usersRouter = require('./controllers/users')
 const middleware = require('./utils/middleware')
 const mongoose = require('mongoose')
 const config = require('./utils/config')
+const loginRouter = require('./controllers/login')
 
 
 mongoose
@@ -23,6 +24,7 @@ app.use(middleware.logger)
 
 app.use('/api/blogs', blogsRouter)
 app.use('/api/users', usersRouter)
+app.use('/api/login', loginRouter)
 
 app.use(middleware.error)
 
