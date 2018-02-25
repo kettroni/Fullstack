@@ -19,6 +19,4 @@ userSchema.statics.format = function(user) {
 
 const User = mongoose.model('User', userSchema)
 
-
-
 module.exports = User
