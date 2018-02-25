@@ -1,5 +1,4 @@
 const blogsRouter = require('express').Router()
-
 const Blog = require('../models/blog')
 
 blogsRouter.get('', async (request, response) => {
@@ -29,6 +28,31 @@ blogsRouter.delete('/:id', async (request, response) => {
       return response.status(200).json('Successfully deleted')
     }
   })
+})
+
+blogsRouter.put('/:id', async (request, response) => {
+  const id = request.params.id
+  const temp = request.body
+  const changes = {}
+  if (temp.title) {
+    changes['title'] = temp.title
+  } else if (temp.author) {
+    changes['author'] = temp.author
+  } else if (temp.url) {
+    changes['url'] = temp.url
+  }
+
+  try {
+    const found = await Blog.findByIdAndUpdate(id, changes, (err) => {
+      if (err) {
+        response.status(404).json('Not found')
+      } else {
+        response.status(200).json('Updated')
+      }
+    })
+  } catch (e) {
+    response.status(400).json('Wrong input')
+  }
 })
 
 module.exports = blogsRouter
