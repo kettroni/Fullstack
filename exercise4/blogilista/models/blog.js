@@ -5,7 +5,13 @@ if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config()
 }
 
-const url = process.env.MONGODB_URI
+let url = ''
+
+if (process.env.NODE_ENV === 'test') {
+  url = process.env.TEST_MONGODB_URI
+} else {
+  url = process.env.MONGODB_URI
+}
 
 mongoose.connect(url)
 
