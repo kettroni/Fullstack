@@ -69,7 +69,7 @@ test('POST request saves and get returns updated list after', async () => {
   expect(after.body.length).toBe(beginning.body.length + 1)
 })
 
-test('adding blog with no value in likes assigns it to 0', async () => {
+test('adding a blog with no value in likes assigns it to 0', async () => {
 
   const response = await api
     .post('/api/blogs')
@@ -82,6 +82,19 @@ test('adding blog with no value in likes assigns it to 0', async () => {
   const after = await api.get('/api/blogs')
   const likes = after.body.map(a => a.likes)
   expect(likes).toContain(0)
+})
+
+test('adding a blog without title or url responses with status code 400 Bad request', async () => {
+
+  const response = await api
+    .post('/api/blogs')
+    .send({
+      author: "Some random dude",
+      likes: "0"
+    })
+
+  expect(response.status).toBe(400)
+
 })
 
 afterAll(() => {

@@ -23,13 +23,18 @@ const blogSchema = new mongoose.Schema({
 })
 
 blogSchema.statics.format = function(blog) {
-  return {
-    title: blog.title,
-    author: blog.author,
-    url: blog.url,
-    likes: blog.likes || 0,
-    id: blog._id
+  if (blog.title && blog.url) {
+    return {
+      title: blog.title,
+      author: blog.author,
+      url: blog.url,
+      likes: blog.likes || 0,
+      id: blog._id
+    }
+  } else {
+    throw new Error()
   }
+
 }
 
 const Blog = mongoose.model('Blog', blogSchema)
