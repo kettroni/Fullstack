@@ -69,6 +69,21 @@ test('POST request saves and get returns updated list after', async () => {
   expect(after.body.length).toBe(beginning.body.length + 1)
 })
 
+test('adding blog with no value in likes assigns it to 0', async () => {
+
+  const response = await api
+    .post('/api/blogs')
+    .send({
+      title: "I AM A TEST",
+      author: "Michael Chan",
+      url: "https://reactpatterns.com/"
+    })
+
+  const after = await api.get('/api/blogs')
+  const likes = after.body.map(a => a.likes)
+  expect(likes).toContain(0)
+})
+
 afterAll(() => {
   server.close()
 })
