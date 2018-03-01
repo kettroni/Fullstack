@@ -16,6 +16,18 @@ class App extends React.Component {
     }
   }
 
+  componentDidMount() {
+    blogService.getAll().then(blogs =>
+      this.setState({ blogs })
+    )
+    const loggedUserJSON = window.localStorage.getItem('loggedUser')
+    if (loggedUserJSON) {
+      const user = JSON.parse(loggedUserJSON)
+      this.setState({user})
+      blogService.setToken(user.token)
+    }
+  }
+
   loginForm = () => (
     <div>
       <h2>Log in to application</h2>
@@ -58,21 +70,20 @@ class App extends React.Component {
     </div>
   )
 
+  logOut() {
+    window.localStorage.clear()
+    this.setState({user: null})
+  }
+
   listBlogs = () => (
     <div>
       <h2>blogs</h2>
-      <p>{this.state.user.name} logged in</p>
+      <p>{this.state.user.name} logged in <button onClick={() => this.logOut()}>logout</button></p>
       {this.state.blogs.map(blog =>
-        <Blog key={blog._id} blog={blog}/>
+        <Blog key={blog.id} blog={blog}/>
       )}
     </div>
   )
-
-  componentDidMount() {
-    blogService.getAll().then(blogs =>
-      this.setState({ blogs })
-    )
-  }
 
   handleLoginFieldChange = (event) => {
     this.setState({ [event.target.name]: event.target.value })
@@ -80,13 +91,16 @@ class App extends React.Component {
 
   login = async (event) => {
     event.preventDefault()
+
     try{
       const user = await loginService.login({
         username: this.state.username,
         password: this.state.password
       })
 
-      this.setState({ username: '', password: '', user})
+      window.localStorage.setItem('loggedUser', JSON.stringify(user))
+      blogService.setToken(user.token)
+      this.setState({ username: '', password: '',user: user})
     } catch(exception) {
       this.setState({
         error: 'username or password is incorrect',
