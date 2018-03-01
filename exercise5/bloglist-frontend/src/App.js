@@ -14,7 +14,8 @@ class App extends React.Component {
       error: null,
       newTitle: '',
       newAuthor: '',
-      newUrl: ''
+      newUrl: '',
+      success: null
     }
   }
 
@@ -39,10 +40,11 @@ class App extends React.Component {
     }
     try {
       const temp = await blogService.create(blogObject)
-      console.log(temp)
-      this.setState({newTitle: '', newAuthor: '', newUrl: '', blogs: this.state.blogs.concat(temp)})
+      const notif = "a new blog '" + blogObject.title + "' by " + blogObject.author + " added"
+      this.setState({newTitle: '', newAuthor: '', newUrl: '', blogs: this.state.blogs.concat(temp), success: notif,
+      error: null})
     } catch (e) {
-      this.setState({error: e})
+      this.setState({newTitle: '', newAuthor: '', newUrl: '',error: e.message, success: null})
     }
 
   }
@@ -120,6 +122,7 @@ class App extends React.Component {
 
   listBlogs = () => (
     <div>
+      {this.state.success}
       <h2>blogs</h2>
       <p>{this.state.user.name} logged in <button onClick={() => this.logOut()}>logout</button></p>
       {this.state.blogs.map(blog =>
