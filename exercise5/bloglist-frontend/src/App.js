@@ -12,7 +12,9 @@ class App extends React.Component {
       password: '',
       user: null,
       error: null,
-      newBlog: null
+      newTitle: '',
+      newAuthor: '',
+      newUrl: ''
     }
   }
 
@@ -26,6 +28,23 @@ class App extends React.Component {
       this.setState({user})
       blogService.setToken(user.token)
     }
+  }
+
+  addBlog = async (event) => {
+    event.preventDefault()
+    const blogObject = {
+      title: this.state.newTitle,
+      author: this.state.newAuthor,
+      url: this.state.newUrl
+    }
+    try {
+      const temp = await blogService.create(blogObject)
+      console.log(temp)
+      this.setState({newTitle: '', newAuthor: '', newUrl: '', blogs: this.state.blogs.concat(temp)})
+    } catch (e) {
+      this.setState({error: e})
+    }
+
   }
 
   loginForm = () => (
@@ -59,13 +78,37 @@ class App extends React.Component {
   blogForm = () => (
     <div>
       <h2>Create new blog</h2>
-
       <form onSubmit={this.addBlog}>
-        <input
-          value={this.state.newBlog}
-          onChange={this.handleBlogChange}
-        />
-        <button type="submit">save</button>
+        <div>
+          title
+          <input
+            type="text"
+            name="newTitle"
+            value={this.state.newTitle}
+            onChange={this.handleLoginFieldChange}
+          />
+        </div>
+        <div>
+          author
+          <input
+            type="text"
+            name="newAuthor"
+            value={this.state.newAuthor}
+            onChange={this.handleLoginFieldChange}
+          />
+        </div>
+        <div>
+          url
+          <input
+            type="text"
+            name="newUrl"
+            value={this.state.newUrl}
+            onChange={this.handleLoginFieldChange}
+          />
+        </div>
+        <div>
+          <button type="submit">create</button>
+        </div>
       </form>
     </div>
   )
@@ -80,8 +123,9 @@ class App extends React.Component {
       <h2>blogs</h2>
       <p>{this.state.user.name} logged in <button onClick={() => this.logOut()}>logout</button></p>
       {this.state.blogs.map(blog =>
-        <Blog key={blog.id} blog={blog}/>
+        <Blog key={blog.id || blog._id} blog={blog}/>
       )}
+      {this.blogForm()}
     </div>
   )
 
@@ -119,6 +163,7 @@ class App extends React.Component {
           this.loginForm() :
           this.listBlogs()
         }
+
       </div>
     )
   }
