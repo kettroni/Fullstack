@@ -2,6 +2,8 @@ import React from 'react'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
+import LoginForm from './components/LoginForm'
+import Toggable from './components/Toggable'
 
 class App extends React.Component {
   constructor(props) {
@@ -15,7 +17,8 @@ class App extends React.Component {
       newTitle: '',
       newAuthor: '',
       newUrl: '',
-      success: null
+      success: null,
+      loginVisible: false
     }
   }
 
@@ -45,37 +48,12 @@ class App extends React.Component {
       error: null})
     } catch (e) {
       this.setState({newTitle: '', newAuthor: '', newUrl: '',error: e.message, success: null})
+      setTimeout(() => {
+        this.setState({ error: null })
+      }, 5000)
     }
 
   }
-
-  loginForm = () => (
-    <div>
-      <h2>Log in to application</h2>
-
-     <form onSubmit={this.login}>
-       <div>
-         username
-         <input
-           type="text"
-           name="username"
-           value={this.state.username}
-           onChange={this.handleLoginFieldChange}
-          />
-        </div>
-        <div>
-          password
-          <input
-            type="password"
-            name="password"
-            value={this.state.password}
-            onChange={this.handleLoginFieldChange}
-           />
-         </div>
-        <button type="submit">login</button>
-      </form>
-    </div>
-  )
 
   blogForm = () => (
     <div>
@@ -119,6 +97,38 @@ class App extends React.Component {
     window.localStorage.clear()
     this.setState({user: null})
   }
+
+  loginForm = () => {
+
+    const hideWhenVisible = { display: this.state.loginVisible ? 'none' : '' }
+    const showWhenVisible = { display: this.state.loginVisible ? '' : 'none' }
+
+    return (
+
+      /*<Toggable buttonLabel='log in'>
+        <LoginForm
+          visible={this.state.visible}
+          username={this.state.username}
+          password={this.state.password}
+          handleChange={this.handleLoginFieldChange}
+          handleSubmit={this.login}
+        />
+      </Toggable>*/
+
+      <div>
+        <div style={hideWhenVisible}>
+          <button onClick={e => this.setState({loginVisible: true})}>log in</button>
+        </div>
+        <div style={showWhenVisible}>
+          <LoginForm
+          login ={this.login}
+          state = {this.state}
+          handleChange = {this.handleLoginFieldChange}
+          />
+          <button onClick={e => this.setState({loginVisible: false})}>cancel</button>
+        </div>
+      </div>
+  )}
 
   listBlogs = () => (
     <div>
