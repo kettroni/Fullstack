@@ -22,8 +22,8 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    blogService.getAll().then(blogs =>
-      this.setState({ blogs })
+    blogService.getAll()
+      .then(blogs => this.setState({blogs: blogs.sort((a,b) => a.likes < b.likes) })
     )
     const loggedUserJSON = window.localStorage.getItem('loggedUser')
     if (loggedUserJSON) {
@@ -134,7 +134,7 @@ class App extends React.Component {
       {this.state.success}
       <h2>blogs</h2>
       <p>{this.state.user.name} logged in <button onClick={() => this.logOut()}>logout</button></p>
-      {this.state.blogs.map(blog =>
+      {this.state.blogs.sort((a,b) => a.likes < b.likes).map(blog =>
         <Blog key={blog.id || blog._id} blog={blog}/>
       )}
       {this.blogForm()}
@@ -168,6 +168,7 @@ class App extends React.Component {
   }
 
   render() {
+
     return (
       <div>
         {this.state.error}
