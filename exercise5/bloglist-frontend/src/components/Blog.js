@@ -30,20 +30,20 @@ class Blog extends React.Component {
       likes: this.state.likes+1
     }
     this.setState({likes: this.state.likes+1})
-    const asd = await BlogService.update(this.state.id, temp)
+    await BlogService.update(this.state.id, temp)
   }
 
   handleDelete = async (event) => {
     event.preventDefault()
     if (window.confirm('delete ' + this.state.title + ' by ' + this.state.author)) {
-      const temp = await BlogService.remove(this.state.id)
+      await BlogService.remove(this.state.id)
     }
 
   }
 
   render() {
-    return (
-      <div style={this.blogStyle}>
+    if (JSON.parse(window.localStorage.getItem('loggedUser')).username === this.state.user.username) {
+      return (<div style={this.blogStyle}>
         <Toggable titleLabel={this.state.title + ' ' + this.state.author}>
           <p><a href={this.state.url}>{this.state.url}</a></p>
           <form onSubmit={this.handleLike}>
@@ -55,7 +55,21 @@ class Blog extends React.Component {
           </form>
         </Toggable>
       </div>
-    )
+      )
+    } else {
+      return (
+        <div style={this.blogStyle}>
+          <Toggable titleLabel={this.state.title + ' ' + this.state.author}>
+            <p><a href={this.state.url}>{this.state.url}</a></p>
+            <form onSubmit={this.handleLike}>
+              <p>{this.state.likes} likes <button type='submit'>like</button></p>
+            </form>
+            <p>added by {this.state.user.name}</p>
+          </Toggable>
+        </div>
+      )
+    }
+
   }
 }
 export default Blog
