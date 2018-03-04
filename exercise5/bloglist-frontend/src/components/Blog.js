@@ -33,15 +33,26 @@ class Blog extends React.Component {
     const asd = await BlogService.update(this.state.id, temp)
   }
 
+  handleDelete = async (event) => {
+    event.preventDefault()
+    if (window.confirm('delete ' + this.state.title + ' by ' + this.state.author)) {
+      const temp = await BlogService.remove(this.state.id)
+    }
+
+  }
+
   render() {
     return (
       <div style={this.blogStyle}>
         <Toggable titleLabel={this.state.title + ' ' + this.state.author}>
           <p><a href={this.state.url}>{this.state.url}</a></p>
           <form onSubmit={this.handleLike}>
-          <p>{this.state.likes} likes <button type='submit'>like</button></p>
+            <p>{this.state.likes} likes <button type='submit'>like</button></p>
           </form>
           <p>added by {this.state.user.name}</p>
+          <form onSubmit={this.handleDelete}>
+            <button type='submit'>delete</button>
+          </form>
         </Toggable>
       </div>
     )

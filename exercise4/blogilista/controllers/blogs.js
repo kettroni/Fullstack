@@ -39,14 +39,20 @@ blogsRouter.post('', async (request, response) => {
 })
 
 blogsRouter.delete('/:id', async (request, response) => {
+  let bleg
+  let decodedToken
+  const id = request.params.id
   try {
-    const id = request.params.id
-    const decodedToken = jwt.verify(request.token, process.env.SECRET)
+    decodedToken = jwt.verify(request.token, process.env.SECRET)
     const user = await User.findById(decodedToken.id)
-    const bleg = await Blog.findById(id)
+    bleg = await Blog.findById(id)
+
   } catch (e) {
+    console.log(e)
     response.status(401).json('You can only delete your own blogs!')
   }
+  console.log(bleg.user)
+  console.log(decodedToken)
   if (decodedToken.id === bleg.user.toString()) {
     const result = await Blog.findByIdAndRemove(id, (err) => {
       if (err) {
