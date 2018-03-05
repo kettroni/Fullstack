@@ -19,9 +19,10 @@ class AnecdoteList extends React.Component {
                 has {anecdote.votes}
                 <button onClick={async() => {
                   const temp = this.props
+                  const it = await AnecdoteService.vote(anecdote.id)
                   return (
-                    temp.addVote(anecdote.id),
-                    temp.changeNotification('you voted "' + anecdote.content + '"'),
+                    temp.addVote(it.id),
+                    temp.changeNotification('you voted "' + it.content + '"'),
                     setTimeout(function(){temp.clearNotification()}, 5000)
                   )}
                 }>
