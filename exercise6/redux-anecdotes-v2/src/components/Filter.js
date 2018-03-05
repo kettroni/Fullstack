@@ -1,9 +1,10 @@
 import React from 'react'
 import { changeFilter } from '../reducers/actionCreators'
+import { connect } from 'react-redux'
 class Filter extends React.Component {
 
   handleChange = (e) => {
-    this.props.store.dispatch(changeFilter(e.target.value.toLowerCase()))
+    this.props.changeFilter(e.target.value.toLowerCase())
   }
 
   render() {
@@ -20,4 +21,15 @@ class Filter extends React.Component {
   }
 }
 
-export default Filter
+const mapStateToProps = (state) => {
+  return {
+    filter: state.filter
+  }
+}
+
+const ConnectedFilter = connect(
+  mapStateToProps,
+  { changeFilter },
+)(Filter)
+
+export default ConnectedFilter
