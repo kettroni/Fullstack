@@ -42,34 +42,39 @@ class Blog extends React.Component {
   }
 
   render() {
-    if (JSON.parse(window.localStorage.getItem('loggedUser')).username === this.state.user.username) {
-      return (<div style={this.blogStyle}>
+    if (window.localStorage) {
+      if (JSON.parse(window.localStorage.getItem('loggedUser')).username === this.state.user.username) {
+        return (
+          <div className='wrapper' style={this.blogStyle}>
+            <Toggable titleLabel={this.state.title + ' ' + this.state.author}>
+              <div className='details'>
+                <p><a href={this.state.url}>{this.state.url}</a></p>
+                <form onSubmit={this.handleLike}>
+                  <p>{this.state.likes} likes <button type='submit'>like</button></p>
+                </form>
+                <p>added by {this.state.user.name}</p>
+                <form onSubmit={this.handleDelete}>
+                  <button type='submit'>delete</button>
+                </form>
+              </div>
+            </Toggable>
+          </div>
+        )
+      }
+    }
+    return (
+      <div className='wrapper' style={this.blogStyle}>
         <Toggable titleLabel={this.state.title + ' ' + this.state.author}>
-          <p><a href={this.state.url}>{this.state.url}</a></p>
-          <form onSubmit={this.handleLike}>
-            <p>{this.state.likes} likes <button type='submit'>like</button></p>
-          </form>
-          <p>added by {this.state.user.name}</p>
-          <form onSubmit={this.handleDelete}>
-            <button type='submit'>delete</button>
-          </form>
-        </Toggable>
-      </div>
-      )
-    } else {
-      return (
-        <div style={this.blogStyle}>
-          <Toggable titleLabel={this.state.title + ' ' + this.state.author}>
+          <div className='details'>
             <p><a href={this.state.url}>{this.state.url}</a></p>
             <form onSubmit={this.handleLike}>
               <p>{this.state.likes} likes <button type='submit'>like</button></p>
             </form>
-            <p>added by {this.state.user.name}</p>
-          </Toggable>
-        </div>
-      )
-    }
-
+          </div>
+          <p>added by {this.state.user.name}</p>
+        </Toggable>
+      </div>
+    )
   }
 }
 export default Blog
