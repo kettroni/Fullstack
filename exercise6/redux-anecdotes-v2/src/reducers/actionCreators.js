@@ -37,4 +37,4 @@ function changeFilter(filter) {
   }
 }
 
-export {addVote, createNew, changeNotification, clearNotification, changeFilter}
+export { addVote, createNew, changeNotification, clearNotification, changeFilter }
