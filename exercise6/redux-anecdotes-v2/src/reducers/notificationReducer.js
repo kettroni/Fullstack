@@ -1,7 +1,11 @@
-const notificationReducer = (state = 'Initial notification', action) => {
+const initialState = 'No notifications'
+
+const notificationReducer = (state = initialState, action) => {
   switch (action.type) {
     case 'SET_NOTIFICATION':
       return action.notification
+    case 'CLEAR':
+      return initialState
     default:
       return state
   }
@@ -13,5 +17,12 @@ export const notificationChange = (notification) => {
     notification
   }
 }
+
+export const notificationClear = () => {
+  return {
+    type: 'CLEAR'
+  }
+}
+
 
 export default notificationReducer

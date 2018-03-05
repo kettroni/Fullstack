@@ -1,6 +1,7 @@
 const VOTE = 'VOTE'
 const CREATE = 'CREATE'
-
+const SET_NOTIFICATION  = 'SET_NOTIFICATION'
+const CLEAR = 'CLEAR'
 function addVote(params) {
   return {
     type: VOTE,
@@ -15,4 +16,17 @@ function createNew(content) {
   }
 }
 
-export {addVote, createNew}
+function changeNotification(notification) {
+  return {
+    type: SET_NOTIFICATION,
+    notification
+  }
+}
+
+function clearNotification() {
+  return {
+    type: CLEAR
+  }
+}
+
+export {addVote, createNew, changeNotification, clearNotification}

@@ -30,9 +30,6 @@ const reducer = (store = initialState, action) => {
 
     return [...store, { content: action.content, id: getId(), votes:0 }]
   }
-  if (action.type === '') {
-
-  }
 
   return store
 }
