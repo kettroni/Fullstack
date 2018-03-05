@@ -1,12 +1,15 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { addVote, changeNotification, clearNotification } from '../reducers/actionCreators'
+import Filter from './Filter'
 class AnecdoteList extends React.Component {
   render() {
     return (
       <div>
+        <h2>Anecdotes</h2>
+        <Filter />
         <div>
-          {this.props.anecdotes.filter(a => a.content.toLowerCase().includes(this.props.filter)).sort((a, b) => b.votes - a.votes).map(anecdote =>
+          {this.props.anecdotesToShow.map(anecdote =>
             <div key={anecdote.id}>
               <div>
                 {anecdote.content}
@@ -32,10 +35,15 @@ class AnecdoteList extends React.Component {
   }
 }
 
+const filteredAnecdotes = (anecdotes, filter) => {
+  return anecdotes
+    .filter(a => a.content.toLowerCase().includes(filter))
+    .sort((a, b) => b.votes - a.votes)
+}
+
 const mapStateToProps = (state) => {
   return {
-    filter: state.filter,
-    anecdotes: state.anecdotes
+    anecdotesToShow: filteredAnecdotes(state.anecdotes, state.filter)
   }
 }
 
