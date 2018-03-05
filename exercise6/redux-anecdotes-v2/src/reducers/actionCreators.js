@@ -2,6 +2,7 @@ const VOTE = 'VOTE'
 const CREATE = 'CREATE'
 const SET_NOTIFICATION  = 'SET_NOTIFICATION'
 const CLEAR = 'CLEAR'
+const SET_FILTER = 'SET_FILTER'
 function addVote(params) {
   return {
     type: VOTE,
@@ -29,4 +30,11 @@ function clearNotification() {
   }
 }
 
-export {addVote, createNew, changeNotification, clearNotification}
+function changeFilter(filter) {
+  return {
+    type: SET_FILTER,
+    filter
+  }
+}
+
+export {addVote, createNew, changeNotification, clearNotification, changeFilter}
