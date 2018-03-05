@@ -7,9 +7,37 @@ const getAll = async () => {
   return response.data
 }
 
-const add = async (newObject) => {
-  const response = await axios.post(url, { content: newObject, votes: 0 })
-  return response.data
+export const addVote = (id) => {
+  return async (dispatch) => {
+    const response = await axios.get(url + `/${id}`)
+    const temp = response.data
+    temp.votes++
+    await axios.put(url + `/${id}` , temp)
+    dispatch({
+      type: 'VOTE',
+      id: temp.id
+    })
+  }
+}
+
+export const anecInitialization = () => {
+  return async (dispatch) => {
+    const anecdotes = await getAll()
+    dispatch({
+      type: 'INIT_ANEC',
+      data: anecdotes
+    })
+  }
+}
+
+export const add = (newObject) => {
+  return async (dispatch) => {
+    const response = await axios.post(url, { content: newObject, votes: 0 })
+    dispatch({
+      type: 'CREATE_ANEC',
+      data: response.data
+    })
+  }
 }
 
 const remove = async (id) => {
@@ -17,16 +45,4 @@ const remove = async (id) => {
   return response.data
 }
 
-const vote = async (id) => {
-  const temp = await getAll()
-
-  const filtered = temp.filter((a) => a.id === id)
-
-  filtered[0].votes++
-
-  const response = await axios.put(url + `/${id}` , filtered[0])
-  return response.data
-
-}
-
-export default { getAll, add, vote, remove }
+export default { getAll, remove }

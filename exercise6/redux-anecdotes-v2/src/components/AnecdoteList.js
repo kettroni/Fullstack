@@ -1,9 +1,16 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { addVote, changeNotification, clearNotification } from '../reducers/actionCreators'
+import { changeNotification, clearNotification } from '../reducers/actionCreators'
+import { addVote } from '../services/anecdotes'
 import Filter from './Filter'
-import AnecdoteService from '../services/anecdotes'
 class AnecdoteList extends React.Component {
+  handleLike = async (anecdote) => {
+    const temp = this.props
+    console.log()
+    temp.addVote(anecdote.id)
+    temp.changeNotification('you voted "' + anecdote.content + '"')
+    setTimeout(function(){temp.clearNotification()}, 5000)
+  }
   render() {
     return (
       <div>
@@ -17,15 +24,9 @@ class AnecdoteList extends React.Component {
               </div>
               <div>
                 has {anecdote.votes}
-                <button onClick={async() => {
-                  const temp = this.props
-                  const it = await AnecdoteService.vote(anecdote.id)
-                  return (
-                    temp.addVote(it.id),
-                    temp.changeNotification('you voted "' + it.content + '"'),
-                    setTimeout(function(){temp.clearNotification()}, 5000)
-                  )}
-                }>
+                <button onClick={() => {
+                  this.handleLike(anecdote)
+                }}>
                   vote
                 </button>
               </div>

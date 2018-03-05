@@ -1,21 +1,6 @@
-const VOTE = 'VOTE'
-const CREATE = 'CREATE_ANEC'
 const SET_NOTIFICATION  = 'SET_NOTIFICATION'
 const CLEAR = 'CLEAR'
 const SET_FILTER = 'SET_FILTER'
-function addVote(params) {
-  return {
-    type: VOTE,
-    id: params
-  }
-}
-
-export const createNew = (data) => {
-  return {
-    type: CREATE,
-    data
-  }
-}
 
 function changeNotification(notification) {
   return {
@@ -36,5 +21,4 @@ function changeFilter(filter) {
     filter
   }
 }
-
-export { addVote, changeNotification, clearNotification, changeFilter }
+export { changeNotification, clearNotification, changeFilter }
