@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { addVote, changeNotification, clearNotification } from '../reducers/actionCreators'
 import Filter from './Filter'
+import AnecdoteService from '../services/anecdotes'
 class AnecdoteList extends React.Component {
   render() {
     return (
@@ -16,7 +17,7 @@ class AnecdoteList extends React.Component {
               </div>
               <div>
                 has {anecdote.votes}
-                <button onClick={() => {
+                <button onClick={async() => {
                   const temp = this.props
                   return (
                     temp.addVote(anecdote.id),

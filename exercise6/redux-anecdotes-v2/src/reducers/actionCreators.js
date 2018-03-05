@@ -10,10 +10,10 @@ function addVote(params) {
   }
 }
 
-function createNew(content) {
+export const createNew = (data) => {
   return {
     type: CREATE,
-    content
+    data
   }
 }
 
@@ -37,4 +37,4 @@ function changeFilter(filter) {
   }
 }
 
-export { addVote, createNew, changeNotification, clearNotification, changeFilter }
+export { addVote, changeNotification, clearNotification, changeFilter }

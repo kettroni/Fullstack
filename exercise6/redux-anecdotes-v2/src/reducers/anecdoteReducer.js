@@ -1,8 +1,5 @@
 const anecdotesAtStart = []
 
-
-const getId = () => (100000*Math.random()).toFixed(0)
-
 const asObject = (anecdote) => {
   return {
     content: anecdote.content,
@@ -21,8 +18,7 @@ const reducer = (store = initialState, action) => {
     return [...old, { ...voted, votes: voted.votes+1 } ]
   }
   if (action.type === 'CREATE_ANEC') {
-
-    return [...store, { content: action.content, id: getId(), votes:0 }]
+    return [...store, action.data]
   }
   if (action.type === 'INIT_ANEC') {
     return action.data
