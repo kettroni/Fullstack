@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { changeNotification, clearNotification } from '../reducers/actionCreators'
+import { notify } from '../reducers/actionCreators'
 import { add } from '../services/anecdotes'
 
 
@@ -11,8 +11,7 @@ class AnecdoteForm extends React.Component {
     e.preventDefault()
     const content = e.target.anecdote.value
     temp.add(content)
-    temp.changeNotification('added a new anecdote "' + content + '" successfully!')
-    setTimeout(function(){temp.clearNotification()}, 5000)
+    temp.notify('added a new anecdote "' + content + '" successfully!', 5000)
   }
   render() {
     return (
@@ -35,7 +34,7 @@ const mapStateToProps = (state) => {
 
 const ConnectedAnecdoteForm = connect(
   mapStateToProps,
-  { add, changeNotification, clearNotification },
+  { add, notify },
 )(AnecdoteForm)
 
 export default ConnectedAnecdoteForm

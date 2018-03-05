@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { changeNotification, clearNotification } from '../reducers/actionCreators'
+import { notify } from '../reducers/actionCreators'
 import { addVote } from '../services/anecdotes'
 import Filter from './Filter'
 class AnecdoteList extends React.Component {
@@ -8,8 +8,7 @@ class AnecdoteList extends React.Component {
     const temp = this.props
     console.log()
     temp.addVote(anecdote.id)
-    temp.changeNotification('you voted "' + anecdote.content + '"')
-    setTimeout(function(){temp.clearNotification()}, 5000)
+    temp.notify('you voted "' + anecdote.content + '"', 5000)
   }
   render() {
     return (
@@ -57,7 +56,7 @@ const mapStateToProps = (state) => {
 
 const ConnectedAnecdoteList = connect(
   mapStateToProps,
-  { addVote, changeNotification, clearNotification },
+  { addVote, notify },
 )(AnecdoteList)
 
 export default ConnectedAnecdoteList
