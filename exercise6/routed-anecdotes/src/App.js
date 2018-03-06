@@ -1,11 +1,24 @@
 import React from 'react'
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Link, NavLink } from 'react-router-dom'
+import { ListGroup, ListGroupItem } from 'react-bootstrap'
 
+const navStyle = {
+  'backgroundColor': 'lightblue',
+  'padding': '12px',
+  'border': '10px groove',
+  'borderColor': 'lightblue',
+  'width': '30%'
+}
+
+const navActive = {
+  'backgroundColor': 'orange',
+  'padding': '8px'
+}
 const Menu = () => (
-  <div>
-    <Link to='/'>anecdotes</Link>&nbsp;
-    <Link to='/create'>create new</Link>&nbsp;
-    <Link to='/about'>about</Link>&nbsp;
+  <div style={navStyle}>
+    <NavLink activeStyle={navActive} exact to='/'>anecdotes</NavLink>&nbsp;
+    <NavLink activeStyle={navActive} to='/create'>create new</NavLink>&nbsp;
+    <NavLink activeStyle={navActive} to='/about'>about</NavLink>&nbsp;
   </div>
 )
 
@@ -15,7 +28,7 @@ function helper(id) {
 
 const Anecdote = (props) => {
   return (
-    <div>
+    <div className='container'>
       <h2>{props.anecdote.content} by {props.anecdote.author}</h2>
       <p>has {props.anecdote.votes} votes</p>
       <p>for more information see <a href='`{props.anecdote.url}`'>{props.anecdote.info}</a></p>
@@ -26,24 +39,25 @@ const Anecdote = (props) => {
 const AnecdoteList = ({ anecdotes }) => (
   <div>
     <h2>Anecdotes</h2>
-    <ul>
-      {anecdotes.map(anecdote => <li key={anecdote.id} ><Link to={helper(anecdote.id)}>{anecdote.content}</Link></li>)}
-    </ul>
+    <ListGroup>
+      {anecdotes.map(anecdote => <ListGroupItem key={anecdote.id} ><Link to={helper(anecdote.id)}>{anecdote.content}</Link></ListGroupItem>)}
+    </ListGroup>
   </div>
 )
 
 const About = () => (
-  <div>
-    <h2>About anecdote app</h2>
-    <p>According to Wikipedia:</p>
+  <div className='container'>
+      <h2>About anecdote app</h2>
 
-    <em>An anecdote is a brief, revealing account of an individual person or an incident.
-      Occasionally humorous, anecdotes differ from jokes because their primary purpose is not simply to provoke laughter but to reveal a truth more general than the brief tale itself,
-      such as to characterize a person by delineating a specific quirk or trait, to communicate an abstract idea about a person, place, or thing through the concrete details of a short narrative.
-      An anecdote is "a story with a point."</em>
+      <p><img style={{width:'10em', float: 'right'}} alt='' src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Edsger_Wybe_Dijkstra.jpg/800px-Edsger_Wybe_Dijkstra.jpg"></img>According to Wikipedia:</p>
 
-    <p>Software engineering is full of excellent anecdotes, at this app you can find the best and add more.</p>
+        <em>An anecdote is a brief, revealing account of an individual person or an incident.
+          Occasionally humorous, anecdotes differ from jokes because their primary purpose is not simply to provoke laughter but to reveal a truth more general than the brief tale itself,
+          such as to characterize a person by delineating a specific quirk or trait, to communicate an abstract idea about a person, place, or thing through the concrete details of a short narrative.
+          An anecdote is "a story with a point."</em>
+          <p>Software engineering is full of excellent anecdotes, at this app you can find the best and add more.</p>
   </div>
+
 )
 
 const Footer = () => (
@@ -86,20 +100,20 @@ class CreateNew extends React.Component {
   render() {
     return(
       <div>
-          <h2>create a new anecdote</h2>
+          <h2>Create a new anecdote</h2>
           <form onSubmit={this.handleSubmit}>
-            <div>
-              content
-              <input name='content' value={this.state.content} onChange={this.handleChange} />
-            </div>
-            <div>
-              author
-              <input name='author' value={this.state.author} onChange={this.handleChange} />
-            </div>
-            <div>
-              url for more info
-              <input name='info' value={this.state.info} onChange={this.handleChange} />
-            </div>
+            <dl className='row'>
+              <dt className="col-sm-1">Content</dt>
+              <dd className="col-sm-9"><input name='content' value={this.state.content} onChange={this.handleChange} /></dd>
+            </dl>
+            <dl className='row'>
+              <dt className="col-sm-1">Author</dt>
+              <dd className="col-sm-9"><input name='author' value={this.state.author} onChange={this.handleChange} /></dd>
+            </dl>
+            <dl className='row'>
+              <dt className="col-sm-1">Url for more info</dt>
+              <dd className="col-sm-9"><input name='info' value={this.state.info} onChange={this.handleChange} /></dd>
+            </dl>
             <button>create</button>
           </form>
       </div>
@@ -158,24 +172,38 @@ class App extends React.Component {
   }
 
   render() {
+    let notificationStyle
+    if (this.state.notification === '') {
+      notificationStyle = {}
+    } else {
+      notificationStyle = {
+        'border': '10px groove',
+        'borderColor': 'green',
+        'color': 'green',
+        'fontStyle': 'italic',
+        'fontSize': '30px',
+        'width': '50%'}
+    }
     return (
-      <div>
+      <div className='container'>
         <Router>
           <div>
             <h1>Software anecdotes</h1>
               <Menu />
-              <p>{this.state.notification}</p>
+              <div style={notificationStyle}>
+                {this.state.notification}
+              </div>
               <Route exact path='/' render={ () =><AnecdoteList anecdotes={this.state.anecdotes} /> } />
               <Route exact path='/about' render={ () =><About /> } />
               <Route exact path='/create' render={ ({history}) => <CreateNew history={history} addNew={ this.addNew }/> }/>
               <Route exact path="/anecdotes/:id" render={ (match) =>
                   <Anecdote anecdote={this.anecdoteById(match.match.params.id)}/>}
-              />  `
+              />
             <Footer />
           </div>
         </Router>
       </div>
-    );
+    )
   }
 }
 
